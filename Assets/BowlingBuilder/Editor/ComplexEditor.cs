@@ -225,20 +225,22 @@ public static 	void Init()
                 parametrs.Build(index_of_Platform);
                 PlayerSettings.bundleVersion =parametrs.Lister[index_of_Platform].Bindle_Version;
                 PlayerSettings.bundleIdentifier =parametrs.Lister[index_of_Platform].Bindle_Name;
-				PlayerSettings
+				
                 PlayerSettings.productName =parametrs.Lister[index_of_Platform].Product_Name;
               
                  Directory.CreateDirectory("Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/");
                   string[] levels= EditorBuildSettings.scenes.Where(x=>(x.enabled==true)).Select(y=>y.path).ToArray();
                   if (Index_of_Build == 0)
                 {
-                    
+                    PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.Android, parametrs.Lister[index_of_Platform].Android);
 					BuildPipeline.BuildPlayer(levels, "Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/" +parametrs.Lister[index_of_Platform].Release_Name+ ".apk", BuildTarget.Android, BuildOptions.None);
 
                 }
                   if (Index_of_Build == 1)
-					BuildPipeline.BuildPlayer(levels, "Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/" +parametrs.Lister[index_of_Platform].Release_Name, BuildTarget.iPhone, BuildOptions.None);
-
+                  {
+                      PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.iPhone, parametrs.Lister[index_of_Platform].IOS);
+                      BuildPipeline.BuildPlayer(levels, "Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/" + parametrs.Lister[index_of_Platform].Release_Name, BuildTarget.iPhone, BuildOptions.None);
+                  }
                 parametrs.Reset();
                 this.Close();
             }
@@ -261,7 +263,8 @@ public static 	void Init()
 	    GUILayout.Label( "Release Name",GUILayout.MaxWidth(100));
         ReleaseName = GUILayout.TextField(ReleaseName, GUILayout.MaxWidth(70));
        GUILayout.EndHorizontal();
-      if (GUILayout.Button("Save",GUILayout.MaxWidth(200)))
+           GUILayout.BeginHorizontal();
+      if (GUILayout.Button("Save",GUILayout.MaxWidth(100)))
       {
           this.parametrs.Count_of_Release++;
           this.parametrs.Lister[this.parametrs.Lister.Count - 1].Release_Name = ReleaseName;
@@ -270,6 +273,11 @@ public static 	void Init()
        
         Add = false;
       }
+      if (GUILayout.Button("Cancel",GUILayout.MaxWidth(100)))
+      {
+          Add = false;
+      }
+      GUILayout.EndHorizontal();
         #endregion
      }
        GUILayout.EndScrollView();
