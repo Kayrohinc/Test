@@ -225,7 +225,7 @@ public static 	void Init()
                 parametrs.Build(index_of_Platform);
                 PlayerSettings.bundleVersion =parametrs.Lister[index_of_Platform].Bindle_Version;
                 PlayerSettings.bundleIdentifier =parametrs.Lister[index_of_Platform].Bindle_Name;
-
+				PlayerSettings
                 PlayerSettings.productName =parametrs.Lister[index_of_Platform].Product_Name;
               
                  Directory.CreateDirectory("Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/");
@@ -233,11 +233,11 @@ public static 	void Init()
                   if (Index_of_Build == 0)
                 {
                     
-                    BuildPipeline.BuildPlayer(levels, "Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/" +parametrs.Lister[Index_of_Build-1].Release_Name+ ".apk", BuildTarget.Android, BuildOptions.None);
+					BuildPipeline.BuildPlayer(levels, "Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/" +parametrs.Lister[index_of_Platform].Release_Name+ ".apk", BuildTarget.Android, BuildOptions.None);
 
                 }
                   if (Index_of_Build == 1)
-                    BuildPipeline.BuildPlayer(levels, "Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/" +parametrs.Lister[Index_of_Build-1].Release_Name, BuildTarget.iPhone, BuildOptions.None);
+					BuildPipeline.BuildPlayer(levels, "Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/" +parametrs.Lister[index_of_Platform].Release_Name, BuildTarget.iPhone, BuildOptions.None);
 
                 parametrs.Reset();
                 this.Close();
