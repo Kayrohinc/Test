@@ -229,20 +229,20 @@ public static 	void Init()
                 PlayerSettings.productName =parametrs.Lister[index_of_Platform].Product_Name;
               
                  Directory.CreateDirectory("Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/");
-                  string[] levels= EditorBuildSettings.scenes.Where(x=>(x.enabled==true)).Select(y=>y.path).ToArray();     
-                if (index_of_Platform==0)
+                  string[] levels= EditorBuildSettings.scenes.Where(x=>(x.enabled==true)).Select(y=>y.path).ToArray();
+                  if (Index_of_Build == 0)
                 {
                     
                     BuildPipeline.BuildPlayer(levels, "Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/" +parametrs.Lister[Index_of_Build-1].Release_Name+ ".apk", BuildTarget.Android, BuildOptions.None);
 
                 }
-                if (index_of_Platform == 1)
+                  if (Index_of_Build == 1)
                     BuildPipeline.BuildPlayer(levels, "Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/" +parametrs.Lister[Index_of_Build-1].Release_Name, BuildTarget.iPhone, BuildOptions.None);
 
                 parametrs.Reset();
-
+                this.Close();
             }
-
+            
         }
         #endregion
 
