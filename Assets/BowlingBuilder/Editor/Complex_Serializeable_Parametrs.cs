@@ -21,8 +21,8 @@ public class Complex_Serializeable_Parametrs : ScriptableObject
     public string[] Resources_path;
     public string[] Streaming_path;
     public int SceneCount;
-	public string StreamingPath="Assets/Dont_Used/StreamingAssets/";
-	public string  ResourcesPath="Assets/Dont_Used/Resources/";
+	public string StreamingPath="Assets/Dont_Used/StreamAssets/";
+	public string  ResourcesPath="Assets/Dont_Used/Resource/";
 	[SerializeField]
 	public int Count_of_Release;
    
@@ -75,7 +75,7 @@ public bool IOS_Open;
 
 
 public void Refresh()
-    {
+		{ 
        
 	  	if (this==null)
 		{
@@ -83,19 +83,18 @@ public void Refresh()
             Lister.Add(new Release());
         }
         #region  Resources_Path
-        Resources_path = new string[Directory.GetFiles("Assets/Resources/").Where(x=>!x.EndsWith(".meta")).ToArray().Length + Directory.GetFiles(ResourcesPath).Length];
-		Directory.GetFiles("Assets/Resources/").Where(x=>!x.EndsWith(".meta")).ToArray().CopyTo(Resources_path, 0);
-		Directory.GetFiles(ResourcesPath).CopyTo(Resources_path, Directory.GetFiles("Assets/Resources/").Where(x=>!x.EndsWith(".meta")).ToArray().Length);
+				Resources_path = new string[Directory.GetDirectories("Assets/", "*.*",SearchOption.AllDirectories).Where(x=>x.EndsWith ("/Resources")).ToArray().Length + Directory.GetFiles(ResourcesPath).Length];
+				Directory.GetDirectories("Assets/","*.*", SearchOption.AllDirectories).Where(x=>x.EndsWith ("/Resources")).ToArray().CopyTo(Resources_path, 0);
+				Directory.GetDirectories(ResourcesPath).CopyTo(Resources_path, Directory.GetDirectories("Assets/","*.*", SearchOption.AllDirectories).Where(x=>x.EndsWith ("/Resources")).ToArray().Length);
 		for (int i=0;i<Resources_path.Length;i++) 
 		{
-			Resources_path[i]=Resources_path[i].Split('/')[Resources_path[i].Split('/').Length - 1];
-
+						Resources_path[i]= string.Join("/",(Resources_path[i].Split('/').Where(x=>x!="Assets" &&x!="Resources"&&!ResourcesPath.Contains (x)).ToArray ()));
         }
         #endregion
         #region Streaming_Path
-        Streaming_path = new string[Directory.GetFiles("Assets/StreamingAssets/").Where(x => !x.EndsWith(".meta")).ToArray().Length + Directory.GetFiles(StreamingPath).Length];
-        Directory.GetFiles("Assets/StreamingAssets/").Where(x => !x.EndsWith(".meta")).ToArray().CopyTo(Streaming_path, 0);
-        Directory.GetFiles(StreamingPath).CopyTo(Streaming_path, Directory.GetFiles("Assets/StreamingAssets/").Where(x => !x.EndsWith(".meta")).ToArray().Length);
+				Streaming_path = new string[Directory.GetFiles("Assets/StreamingAssets/","*.*").Where(x => !x.EndsWith(".meta")).ToArray().Length + Directory.GetFiles(StreamingPath).Length];
+				Directory.GetFiles("Assets/StreamingAssets/","*.*").Where(x => !x.EndsWith(".meta")).ToArray().CopyTo(Streaming_path, 0);
+				Directory.GetFiles(StreamingPath).CopyTo(Streaming_path, Directory.GetFiles("Assets/StreamingAssets/","*.*").Where(x => !x.EndsWith(".meta")&&!x.StartsWith(".")).ToArray().Length);
         for (int i = 0; i < Streaming_path.Length; i++)
         {
             Streaming_path[i] = Streaming_path[i].Split('/')[Streaming_path[i].Split('/').Length - 1];
@@ -155,8 +154,8 @@ public void Build(int j)
             {
                 try
                 {
-					File.Move("Assets/StreamingAssets/" + Streaming_path[i], StreamingPath+"/" + Streaming_path[i]);
-					File.Move("Assets/StreamingAssets/" + Streaming_path[i]+".meta",StreamingPath+"/" + Streaming_path[i]+".meta");
+					File.Move("Assets/StreamingAssets/" + Streaming_path[i], StreamingPath + Streaming_path[i]);
+					File.Move("Assets/StreamingAssets/" + Streaming_path[i]+".meta",StreamingPath + Streaming_path[i]+".meta");
 
                 }
                 catch (Exception e)
@@ -165,11 +164,9 @@ public void Build(int j)
                 }
             }
 
-            if ((Lister[j].Streaming[i]) && (!Directory.Exists("Assets/StreamingAssets/" + Streaming_path[i])))
+						if ((Lister[j].Streaming[i]) && (!File.Exists("Assets/StreamingAssets/" + Streaming_path[i])))
             {
-
-
-                try
+          try
                 {
                     File.Move(StreamingPath + Streaming_path[i], "Assets/StreamingAssets/" + Streaming_path[i]);
                      File.Move(StreamingPath + Streaming_path[i]+".meta", "Assets/StreamingAssets/" + Streaming_path[i]+".meta");
@@ -187,13 +184,11 @@ public void Build(int j)
 #region Resources
     for (int i = 0; i < Resources_path.Length; i++)
         {
-			if ((!Lister[j].Resource[i]) && (!File.Exists(ResourcesPath+Resources_path[i])))
+						if ((!Lister[j].Resource[i]) && (!Directory.Exists (ResourcesPath+Resources_path[i])))
             {
                 try
                 {
-                    File.Move("Assets/Resources/" + Resources_path[i], ResourcesPath+"/" + Resources_path[i]);
-					File.Move("Assets/Resources/" + Resources_path[i]+".meta", ResourcesPath+"/" + Resources_path[i]+".meta");
-
+										Directory.Move("Assets/"+Resources_path[i]+"/"+"Resources",ResourcesPath+Resources_path[i]);
                 }
                 catch (Exception e)
                 {
@@ -201,14 +196,13 @@ public void Build(int j)
                 }
             }
 
-            if ((Lister[j].Resource[i]) && (!File.Exists("Assets/Resources/" + Resources_path[i])))
+						if ((Lister[j].Resource[i]) && (!Directory.Exists ("Assets/"+Resources_path[i]+"Resources")))
             {
 
 
                 try
                 {
-                    File.Move(ResourcesPath+"/"+ Resources_path[i], "Assets/Resources/" + Resources_path[i]);
-					File.Move(ResourcesPath+"/" + Resources_path[i]+".meta", "Assets/Resources/" + Resources_path[i]+".meta");
+										Directory.Move(ResourcesPath+Resources_path[i],"Assets/"+Resources_path[i]+"/"+"Resources");
                 }
                 catch (Exception e)
                 {
@@ -235,7 +229,7 @@ public void Reset()
 {
     for (int i = 0; i <Streaming_path.Length; i++)
     {
-          if (!Directory.Exists("Assets/StreamingAssets/" + Streaming_path[i]))
+						if (!File.Exists("Assets/StreamingAssets/" + Streaming_path[i]))
             {
 
 
@@ -257,15 +251,13 @@ public void Reset()
         {
 	
 
-             if (!File.Exists("Assets/Resources/" + Resources_path[i]))
+						if (!Directory.Exists("Assets/" + Resources_path[i]+"/Resources"))
              {
 
 
                 try
                 {
-                    File.Move(ResourcesPath + "/" + Resources_path[i] + ".meta", "Assets/Resources/" + Resources_path[i] + ".meta");
-                    File.Move(ResourcesPath+"/"+ Resources_path[i], "Assets/Resources/" + Resources_path[i]);
-					
+										Directory .Move(ResourcesPath+ Resources_path[i],"Assets/" + Resources_path[i]+"/Resources" );	
                 }
                 catch (Exception e)
                 {

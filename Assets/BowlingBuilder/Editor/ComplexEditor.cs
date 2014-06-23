@@ -15,15 +15,14 @@ public class ComplexEditor :EditorWindow
     public bool Open_Builder;
     public int index_of_Platform;
      public int Index_of_Build;
-	[MenuItem("Window/Bulder")]
+		[MenuItem("Window/Bulder")]
 public static 	void Init()
-	{
+		{  
 		ComplexEditor window=(ComplexEditor)GetWindow(typeof(ComplexEditor));
         window.parametrs = (Complex_Serializeable_Parametrs)AssetDatabase.LoadAssetAtPath("Assets/BowlingBuilder/Parameters.asset", typeof(Complex_Serializeable_Parametrs));
-	if (window.parametrs==null)
-		{
-			window.parametrs= new Complex_Serializeable_Parametrs();
-
+				if (window.parametrs == null) {
+						window.parametrs = new Complex_Serializeable_Parametrs ();
+				}
             if (!Directory.Exists(window.parametrs.ResourcesPath))
             {
                 Directory.CreateDirectory(window.parametrs.ResourcesPath);
@@ -32,12 +31,15 @@ public static 	void Init()
             {
                 Directory.CreateDirectory(window.parametrs.StreamingPath);
             }
-    
-    }
-   
+				if   (!Directory.Exists ("Assets/StreamingAssets/"))
+				{
+						Directory.CreateDirectory ("Assets/StreamingAssets/");
+				}
+				AssetDatabase.Refresh (); 
+			
       
 	window.parametrs.Refresh();
-    
+		
 	}
 	#region GUIParametrs
 	public void OnGUI()
@@ -100,7 +102,7 @@ public static 	void Init()
                  for (int i = 0; i < parametrs.Lister[j].Resource.Length; i++)
                  {
 
-                     parametrs.Lister[j].Resource[i] = EditorGUILayout.Toggle(parametrs.Resources_path[i], parametrs.Lister[j].Resource[i]);
+												parametrs.Lister[j].Resource[i] = EditorGUILayout.Toggle(parametrs.Resources_path[i]+"/Resouces", parametrs.Lister[j].Resource[i]);
 
                  }
              }
@@ -242,7 +244,8 @@ public static 	void Init()
                       BuildPipeline.BuildPlayer(levels, "Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/" + parametrs.Lister[index_of_Platform].Release_Name, BuildTarget.iPhone, BuildOptions.None);
                   }
                 parametrs.Reset();
-                this.Close();
+
+							
             }
             
         }
