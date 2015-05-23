@@ -69,6 +69,11 @@ public static 	void Init()
             GUILayout.BeginHorizontal();
             GUILayout.Label("Bundle_Name", GUILayout.MaxWidth(100));
             parametrs.Lister[j].Bindle_Name = GUILayout.TextField(parametrs.Lister[j].Bindle_Name, 20, GUILayout.MaxWidth(100));
+			GUILayout.EndHorizontal();
+			GUILayout.Space(10f);
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("Define_Symbols", GUILayout.MaxWidth(100));
+			parametrs.Lister[j].Define_Symbols = GUILayout.TextField(parametrs.Lister[j].Define_Symbols, 20, GUILayout.MaxWidth(100));
             GUILayout.EndHorizontal();
             GUILayout.Space(10f);
             #endregion
@@ -230,16 +235,20 @@ public static 	void Init()
 				
                 PlayerSettings.productName =parametrs.Lister[index_of_Platform].Product_Name;
               
+
                  Directory.CreateDirectory("Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/");
                   string[] levels= EditorBuildSettings.scenes.Where(x=>(x.enabled==true)).Select(y=>y.path).ToArray();
-                  if (Index_of_Build == 0)
+
+                 if (Index_of_Build == 0)
                 {
+					PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android,parametrs.Lister[index_of_Platform].Define_Symbols);
                     PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.Android, parametrs.Lister[index_of_Platform].Android);
 					BuildPipeline.BuildPlayer(levels, "Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/" +parametrs.Lister[index_of_Platform].Release_Name+ ".apk", BuildTarget.Android, BuildOptions.None);
 
                 }
                   if (Index_of_Build == 1)
                   {
+					PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iPhone,parametrs.Lister[index_of_Platform].Define_Symbols);
                       PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.iPhone, parametrs.Lister[index_of_Platform].IOS);
                       BuildPipeline.BuildPlayer(levels, "Builds/" + DateTime.Now.Hour + "H" + DateTime.Now.Minute + "m" + "/" + parametrs.Lister[index_of_Platform].Release_Name, BuildTarget.iPhone, BuildOptions.None);
                   }
