@@ -51,6 +51,7 @@ public class Complex_Serializeable_Parametrs : ScriptableObject
 			Bindle_Name = "";
 			Product_Name = "";
 			Release_Name = "";
+			Define_Symbols = "";
 		}
 	#region Parameters
 		public 	bool[] Scenes;
@@ -82,6 +83,7 @@ public class Complex_Serializeable_Parametrs : ScriptableObject
 		public string Bindle_Version;
 		public string Product_Name;
 		public string Bindle_Name;
+		public string Define_Symbols;
 	#endregion
 	}
 
